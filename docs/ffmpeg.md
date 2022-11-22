@@ -718,6 +718,32 @@ $ ffmpeg -i test.mp4 -af "loudnorm=I=-5:LRA=1" out.mp4
 $ ffmpeg -i input.mp3 -af "channelmap=1-0|1-1" output.mp3
 ```
 
+流处理
+---
+
+### 拉取流
+
+```bash
+# 拉取流到本地
+$ ffmpeg -i http://127.0.0.1/test.m3u8 -c copy D:/test.flv
+```
+
+### 推送流到远程
+
+```bash
+# 推送本地的流到远程
+$ ffmpeg -re -stream_loop -1 -i D:/test.flv -vcodec copy -acodec copy -f rtsp -rtsp_transport tcp rtsp://127.0.0.1/test
+```
+
+远程端根据 `-rtsp_transport` 设定的协议配置对应的协议接收
+
+### 转发
+
+```bash
+# 拉取远程流并转发
+$ ffmpeg -i "rtsp://127.0.0.1/test" -q 0 -f mpegts -codec:v mpeg1video http://127.0.0.1:4000/steam
+```
+
 另见
 ---
 
